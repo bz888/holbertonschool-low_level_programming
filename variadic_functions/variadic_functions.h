@@ -15,7 +15,8 @@ void print_int(va_list args);
 void print_string(va_list args);
 void print_float(va_list args);
 
-typedef struct type_print {
+typedef struct type_print
+{
 	char type;
 	void (*print_type)(va_list);
 } type_print;

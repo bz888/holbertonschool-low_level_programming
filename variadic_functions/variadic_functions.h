@@ -15,6 +15,11 @@ void print_int(va_list args);
 void print_string(va_list args);
 void print_float(va_list args);
 
+/**
+ * struct type_print - struct for matching types with print functions
+ * @type: format specifier
+ * @print_type: pointer to the corresponding printing function
+ */
 typedef struct type_print
 {
 	char type;
@@ -22,3 +27,4 @@ typedef struct type_print
 } type_print;
 
 #endif
+

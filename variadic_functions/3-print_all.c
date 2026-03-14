@@ -3,7 +3,56 @@
 #include <stdio.h>
 
 /**
- * print_all - prints anything according to a format string
+ * print_char - prints a char
+ * @args: argument list
+ *
+ * Return: nothing
+ */
+void print_char(va_list args)
+{
+	printf("%c", va_arg(args, int));
+}
+
+/**
+ * print_int - prints an int
+ * @args: argument list
+ *
+ * Return: nothing
+ */
+void print_int(va_list args)
+{
+	printf("%d", va_arg(args, int));
+}
+
+/**
+ * print_float - prints a float
+ * @args: argument list
+ *
+ * Return: nothing
+ */
+void print_float(va_list args)
+{
+	printf("%f", va_arg(args, double));
+}
+
+/**
+ * print_string - prints a string
+ * @args: argument list
+ *
+ * Return: nothing
+ */
+void print_string(va_list args)
+{
+	char *str;
+
+	str = va_arg(args, char *);
+	if (str == NULL)
+		str = "(nil)";
+	printf("%s", str);
+}
+
+/**
+ * print_all - prints anything
  * @format: list of argument types
  *
  * Return: nothing
@@ -11,30 +60,32 @@
 void print_all(const char * const format, ...)
 {
 	va_list args;
-	unsigned int i = 0;
-	char *str;
-	char *sep = "";
+	unsigned int i, j;
+	char *sep;
+	type_print types[] = {
+		{'c', print_char},
+		{'i', print_int},
+		{'f', print_float},
+		{'s', print_string},
+		{'\0', NULL}
+	};
 
 	va_start(args, format);
-
-	while (format && format[i])
+	i = 0;
+	sep = "";
+	while (format != NULL && format[i] != '\0')
 	{
-		if (format[i] == 'c')
-			printf("%s%c", sep, va_arg(args, int)), sep = ", ";
-		if (format[i] == 'i')
-			printf("%s%d", sep, va_arg(args, int)), sep = ", ";
-		if (format[i] == 'f')
-			printf("%s%f", sep, va_arg(args, double)), sep = ", ";
-		if (format[i] == 's')
+		j = 0;
+		while (types[j].type != '\0' && types[j].type != format[i])
+			j++;
+		if (types[j].type != '\0')
 		{
-			str = va_arg(args, char *);
-			if (!str)
-				str = "(nil)";
-			printf("%s%s", sep, str), sep = ", ";
+			printf("%s", sep);
+			types[j].print_type(args);
+			sep = ", ";
 		}
 		i++;
 	}
-
 	printf("\n");
 	va_end(args);
 }

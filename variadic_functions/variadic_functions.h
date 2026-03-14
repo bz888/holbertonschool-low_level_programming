@@ -1,5 +1,5 @@
-#ifndef VARIADIC_FUNCTIONS_H
-#define VARIADIC_FUNCTIONS_H
+#ifndef variadic_functions_h
+#define variadic_functions_h
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -20,3 +20,4 @@ typedef struct type_print {
 	void (*print_type)(va_list);
 } type_print;
 
+#endif

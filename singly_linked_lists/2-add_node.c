@@ -1,36 +1,62 @@
 #include "lists.h"
-#include <stdlib.h>
-#include <string.h>
+
+size_t _strlen(const char *s);
 
 /**
- * add_node - adds a new node at the beginning of a list_t list
- * @head: pointer to pointer of the head of the list
- * @str: string to be added
+ * add_node - add note to beginning of list
+ * @head: pointer to head pointer
+ * @str: string to store
  *
- * Return: address of the new element, or NULL if it failed
+ * Return: first element of the list
  */
 list_t *add_node(list_t **head, const char *str)
 {
-	list_t *new_node;
+	list_t *first = malloc(sizeof(list_t));
 
-	if (head == NULL)
+	if (!first)
 		return (NULL);
-
-	new_node = malloc(sizeof(list_t));
-	if (new_node == NULL)
-		return (NULL);
-
-	new_node->str = strdup(str);
-	if (new_node->str == NULL)
+	if (!head)
 	{
-		free(new_node);
+		free(first);
 		return (NULL);
 	}
 
-	new_node->len = strlen(str);
-	new_node->next = *head;
-	*head = new_node;
+	if (!str)
+	{
+		first->str = NULL;
+		first->len = 0;
+	}
+	else
+	{
+		first->str = strdup(str);
+		if (!first->str)
+		{
+			free(first);
+			return (NULL);
+		}
+		first->len = _strlen(str);
+	}
 
-	return (new_node);
+	first->next = *head;
+	*head = first;
+	return (first);
+}
+
+/**
+ * _strlen - find length of s
+ * @s: string to be measured (not NULL)
+ *
+ * Return: length of string
+ */
+size_t _strlen(const char *s)
+{
+	size_t len = 0;
+
+	while (s && *s)
+	{
+		len++;
+		s++;
+	}
+	return (len);
 }
 

@@ -5,6 +5,13 @@
 #include <stdio.h>
 #include <sys/stat.h>
 
+/**
+ * main - copies the content of a file to another file
+ * @ac: number of arguments
+ * @av: array of arguments
+ *
+ * Return: 0 on success
+ */
 int main(int ac, char **av)
 {
 	int fd1, fd2;

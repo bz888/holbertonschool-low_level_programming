@@ -4,62 +4,41 @@
 
 /**
  * hash_table_set - adds or updates an element in a hash table
- * @ht: pointer to the hash table
- * @key: key string
- * @value: value string
+ * @ht: hash table
+ * @key: key
+ * @value: value
  *
  * Return: 1 on success, 0 on failure
  */
 int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
-	hash_node_t *node;
-	hash_node_t *current;
-	unsigned long int index;
-	char *dup_value;
+	hash_node_t *node, *cur;
+	unsigned long int idx;
+	char *val;
 
-	if (!ht || !key || !*key || !value)
+	if (ht == NULL || key == NULL || *key == '\0' || value == NULL)
 		return (0);
-
-	index = key_index((const unsigned char *)key, ht->size);
-	current = ht->array[index];
-
-	while (current)
+	idx = key_index((const unsigned char *)key, ht->size);
+	cur = ht->array[idx];
+	while (cur)
 	{
-		if (strcmp(current->key, key) == 0)
+		if (strcmp(cur->key, key) == 0)
 		{
-			dup_value = strdup(value);
-			if (!dup_value)
+			val = strdup(value);
+			if (val == NULL)
 				return (0);
-
-			free(current->value);
-			current->value = dup_value;
+			free(cur->value);
+			cur->value = val;
 			return (1);
 		}
-		current = current->next;
+		cur = cur->next;
 	}
-
 	node = malloc(sizeof(hash_node_t));
-	if (!node)
-		return (0);
-
-	node->key = strdup(key);
-	if (!node->key)
-	{
-		free(node);
-		return (0);
-	}
-
-	node->value = strdup(value);
-	if (!node->value)
-	{
-		free(node->key);
-		free(node);
-		return (0);
-	}
-
-	node->next = ht->array[index];
-	ht->array[index] = node;
-
+	if (node == NULL || (node->key = strdup(key)) == NULL ||
+		(node->value = strdup(value)) == NULL)
+		return (free(node), free(node->key), 0);
+	node->next = ht->array[idx];
+	ht->array[idx] = node;
 	return (1);
 }
 
